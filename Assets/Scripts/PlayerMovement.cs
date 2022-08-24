@@ -6,37 +6,69 @@ public class PlayerMovement : MonoBehaviour
 {
     //Variables
     public float runSpeed = 5f;
+    private float x,y;
+    private bool isWalking;
+    Vector2 movement;
 
     //References
     public Rigidbody2D rb;
-    Vector2 move;
+    public Animator animator;
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
+    // Update is called once per frame
     void Update()
     {
-        ///Movement///
-        move.x = Input.GetAxis("Horizontal");
-        move.y = Input.GetAxis("Vertical");
-        //////////////
-        
-        FlipSprite();
-    }
 
-    void FixedUpdate()
-    {
-        rb.MovePosition(rb.position + move * runSpeed * Time.deltaTime);
-    }
+        //Movement//
+        x = Input.GetAxis("Horizontal");
+        y = Input.GetAxis("Vertical");
 
-    private void FlipSprite()
-    {
-        bool isMoving = Mathf.Abs(move.x) > Mathf.Epsilon;
-        if(isMoving)
+        if(x != 0 || y != 0)
         {
-            transform.localScale = new Vector2(Mathf.Sign(move.x),1f);
+            if(isWalking)
+            {
+                isWalking = false;
+                animator.SetBool("isWalking", isWalking);
+            }
+
+            Move();
         }
+        else
+        {
+            if(!isWalking)
+            {
+                isWalking = true;
+                animator.SetBool("isWalking", isWalking);
+            }
+        }
+
+       bool isMoving = Mathf.Abs(x)>Mathf.Epsilon;
+       if(isMoving)
+       {
+           transform.localScale = new Vector2(Mathf.Sign(x),1f);
+       }
     }
+
+    private void Move()
+    {
+        animator.SetFloat("Horizontal",x);
+        animator.SetFloat("Vertical",y);
+
+        transform.Translate(x * Time.deltaTime * runSpeed, y * Time.deltaTime * runSpeed,0);
+    }
+
+    // private void FlipSprite()
+    // {
+    //     bool isMoving = Mathf.Abs(movement.x)>Mathf.Epsilon;
+    //     if(isMoving)
+    //     {
+    //         transform.localScale = new Vector2(Mathf.Sign(movement.x),1f);
+    //     }
+    // }
 }
