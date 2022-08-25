@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float runSpeed = 5f;
     private float x,y;
     private bool isWalking;
+    public bool canPlayerMove;
     Vector2 movement;
 
     //References
@@ -17,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        canPlayerMove = true;
+
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
@@ -24,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!canPlayerMove)
+            return;
 
         //Movement//
         x = Input.GetAxis("Horizontal");

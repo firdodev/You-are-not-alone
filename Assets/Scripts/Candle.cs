@@ -28,6 +28,7 @@ public class Candle : MonoBehaviour
             }else{
                 CandleOn = true;
                 print("Candle is: " + CandleOn);
+                timeCheck = 60 * 60;
             }
 
             timeStep = 0;
